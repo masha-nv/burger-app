@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./BuildControls.module.css";
 import OrderSummary from "./../OrderSummary/OrderSummary";
+import { Spinner } from "./../../../Spinner/Spinner";
 
 const BuildControls = ({
   ingredients,
@@ -10,6 +11,7 @@ const BuildControls = ({
   handlePlaceOrder,
   handleCheckout,
   handleCancelCheckout,
+  isOrderProcessing,
 }) => {
   const prices = ingredients.map((ingr) => ingr.price * ingr.qty);
   const price = prices.reduce((acc, val) => {
@@ -50,6 +52,7 @@ const BuildControls = ({
           handleCancelCheckout={handleCancelCheckout}
         />
       )}
+      {isOrderProcessing && <Spinner />}
     </div>
   );
 };

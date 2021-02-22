@@ -3,7 +3,8 @@ import Burger from "../../components/Layout/Burger/Burger";
 import BuildControls from "./../../components/Layout/BuildControls/BuildControls";
 import styles from "./BurgerBuilder.module.css";
 import Backdrop from "./../../components/Layout/Backdrop/Backdrop";
-
+import axios from "./../../axios/axios";
+import { Spinner } from "./../../Spinner/Spinner";
 class BurgerBuilder extends Component {
   state = {
     ingredients: [
@@ -13,11 +14,39 @@ class BurgerBuilder extends Component {
       { ingredient: "Meat", type: "meat", qty: 0, price: 1.28 },
     ],
     isCheckingout: false,
+    isOrderProcessing: false,
   };
+
   handleCheckout = () => {
-    alert("Thank you for your Order");
-    this.setState({ isCheckingout: false });
+    const order = {
+      ingredients: this.state.ingredients,
+      totalPrice: this.state.ingredients.reduce((acc, val) => {
+        return (acc += val["price"] * val["qty"]);
+      }, 0),
+      customer: {
+        name: "Maria Bagirova",
+        email: "text@test.com",
+        address: {
+          street: "112 Northtowne",
+          city: "NY City",
+          zipCode: "10200",
+        },
+      },
+    };
+    axios
+      .post("/orders.json", order)
+      .then((response) => console.log(response))
+      .catch((e) => console.log(e));
+    this.setState({ isCheckingout: false, isOrderProcessing: true });
+    this.showSpinnerEndCheckOut();
   };
+
+  showSpinnerEndCheckOut = () => {
+    setTimeout(() => {
+      this.setState({ isOrderProcessing: false });
+    }, 3000);
+  };
+
   handleCancelCheckout = () => {
     this.setState({ isCheckingout: false });
   };
@@ -47,11 +76,12 @@ class BurgerBuilder extends Component {
   render() {
     return (
       <div className={styles.Content}>
-        {this.state.isCheckingout && (
+        {(this.state.isCheckingout || this.state.isOrderProcessing) && (
           <Backdrop handleHideBackdrop={this.handleCancelCheckout} />
         )}
         <Burger ingredients={this.state.ingredients} />
         <BuildControls
+          isOrderProcessing={this.state.isOrderProcessing}
           handleCheckout={this.handleCheckout}
           handleCancelCheckout={this.handleCancelCheckout}
           handlePlaceOrder={this.handlePlaceOrder}
