@@ -1,0 +1,31 @@
+.Menu {
+  margin-right: 40px;
+  display: none;
+}
+
+.List {
+  display: flex;
+  list-style: none;
+  justify-content: space-around;
+}
+
+.List > li {
+  padding-right: 20px;
+}
+
+.List a {
+  text-decoration: none;
+  color: black;
+  transition: 0.3s;
+  text-transform: uppercase;
+  font-weight: 900;
+}
+.List a:hover {
+  color: #cf1e27;
+}
+
+@media (min-width: 992px) {
+  .Menu {
+    display: block;
+  }
+}

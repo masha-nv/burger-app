@@ -1,0 +1,32 @@
+.Wrapper {
+  cursor: pointer;
+  margin-left: 20px;
+  display: none;
+}
+
+.Wrapper > div {
+  transition: 0.5s;
+  width: 30px;
+  height: 4px;
+  background-color: black;
+  margin-bottom: 7px;
+}
+
+.Wrapper:hover div:nth-child(2) {
+  /* width: 0; */
+}
+.Wrapper:hover div:nth-child(1) {
+  transform: translateY(-2px);
+  /* transform: rotate(-45deg) translate(-15px, -1px); */
+}
+.Wrapper:hover div:nth-child(3) {
+  transform: translateY(2px);
+
+  /* transform: rotate(45deg) translate(-20px, -2px); */
+}
+
+@media (max-width: 991px) {
+  .Wrapper {
+    display: block;
+  }
+}

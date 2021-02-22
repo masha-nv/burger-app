@@ -1,0 +1,9 @@
+.Backdrop {
+  width: 100vw;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  background-color: rgba(14, 13, 13, 0.7);
+  position: absolute;
+  z-index: 2;
+}

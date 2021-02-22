@@ -1,0 +1,20 @@
+.Modal {
+  position: absolute;
+  /* top: 0; */
+  /* left: -10%; */
+  width: 500px;
+  height: 500px;
+  margin-left: -250px;
+  top: -50%;
+  z-index: 2;
+  background-color: rgba(248, 246, 246, 0.7);
+}
+
+@media (max-width: 768px) {
+  .Modal {
+    width: 200px;
+    height: 300px;
+    top: -30%;
+    left: 150%;
+  }
+}
