@@ -2,14 +2,15 @@ import React from "react";
 import styles from "./Order.module.css";
 
 const Order = ({ order }) => {
+  console.log("ONE ORDER", order);
   return (
     <summary className={styles.Order}>
       <div className={styles.OrderInfo}>
         <h4>Ingredients</h4>
         <ul>
-          {order.ingredients.map((ingr) => (
-            <li>
-              {ingr.ingredient} - {ingr.qty}
+          {order.ingredients.map((ingr, i) => (
+            <li key={ingr + i}>
+              {ingr.ingredient} ({ingr.qty})
             </li>
           ))}
         </ul>
@@ -21,7 +22,7 @@ const Order = ({ order }) => {
       <div className={styles.OrderInfo}>
         <h4>Customer Name:</h4>
         <p>
-          {order.firstName} {order.lastName}
+          {order.firstName.value} {order.lastName.value}
         </p>
       </div>
     </summary>

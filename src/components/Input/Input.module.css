@@ -1,0 +1,22 @@
+.Input {
+  width: 100%;
+}
+
+.Input input:focus {
+  background-color: #f5f5f5;
+}
+.Input input {
+  padding-left: 15px;
+}
+
+.errorMessage {
+  /* color: red; */
+  margin-top: 0;
+}
+
+.success {
+  color: green;
+}
+.error {
+  color: red;
+}

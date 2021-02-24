@@ -8,11 +8,12 @@ const OrderConfirmation = (props) => {
       <Modal>
         <h1>Thank you for your order.</h1>
         <button
-          onClick={() => props.history.push("/")}
+          onClick={() => props.history.push("/orders")}
           className={styles.goBack}
         >
-          Go Back
+          All Orders
         </button>
+        <button className={styles.goBack}>Home</button>
       </Modal>
     </div>
   );

@@ -26,13 +26,13 @@
   /* transform: rotate(45deg) translate(-20px, -2px); */
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 991px) {
   .Wrapper {
     display: block;
   }
 }
 
-@media (max-width: 678px) {
+@media (max-width: 900px) {
   .HamburgerIcon {
     margin-left: 10px;
   }

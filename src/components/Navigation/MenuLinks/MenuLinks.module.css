@@ -30,3 +30,7 @@
     display: block;
   }
 }
+
+a.Active {
+  color: #cf1e27;
+}

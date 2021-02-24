@@ -6,16 +6,24 @@ const MenuLinks = () => {
     <nav className={styles.Menu}>
       <ul className={styles.List}>
         <li>
-          <a href="#">Locations</a>
+          <NavLink activeClassName={styles.Active} exact to="/">
+            Locations
+          </NavLink>
         </li>
         <li>
-          <a href="/orders">Orders</a>
+          <NavLink activeClassName={styles.Active} to="/orders">
+            Orders
+          </NavLink>
         </li>
         <li>
-          <NavLink to="/menu">Menu</NavLink>
+          <NavLink activeClassName={styles.Active} to="/menu">
+            Menu
+          </NavLink>
         </li>
         <li>
-          <NavLink to="/login">Sign In</NavLink>
+          <NavLink activeClassName={styles.Active} to="/login">
+            Sign In
+          </NavLink>
         </li>
       </ul>
     </nav>
