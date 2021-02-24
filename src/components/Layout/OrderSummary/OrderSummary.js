@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
 import React, { Component } from "react";
 import Modal from "./../Modal/Modal";
 import styles from "./OrderSummary.module.css";
+import { withRouter } from "react-router-dom";
 
 class OrderSummary extends Component {
   render() {
@@ -14,6 +16,16 @@ class OrderSummary extends Component {
       ingr.qty > 0 ? { ingr: ingr.ingredient, qty: ingr.qty } : ingr
     );
     ingrs = ingrs.filter((ingr) => ingr.qty > 0);
+
+    const params = ingredients.reduce((acc, val) => {
+      for (let key in val) {
+        acc.push(encodeURIComponent(key) + "=" + encodeURIComponent(val[key]));
+      }
+      return acc;
+    }, []);
+
+    const queryString = params.join("&");
+
     return (
       <Modal handleCancelCheckout={handleCancelCheckout}>
         <div className={styles.Summary}>
@@ -32,7 +44,17 @@ class OrderSummary extends Component {
             TOTAL:<b> ${parseFloat(price).toFixed(2)}</b>
           </p>
           <div className={styles.Buttons}>
-            <button onClick={handleCheckout}>Checkout</button>
+            {/* <button
+              onClick={() => {
+                this.props.history.push({
+                  pathname: "/checkout",
+                  search: "?" + queryString,
+                });
+              }}
+            >
+              Continue
+            </button> */}
+            <button onClick={handleCheckout}>Continue</button>
             <button onClick={handleCancelCheckout}>Cancel</button>
           </div>
         </div>
@@ -41,4 +63,4 @@ class OrderSummary extends Component {
   }
 }
 
-export default OrderSummary;
+export default withRouter(OrderSummary);

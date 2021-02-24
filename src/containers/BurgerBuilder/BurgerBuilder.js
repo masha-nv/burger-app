@@ -4,18 +4,27 @@ import BuildControls from "./../../components/Layout/BuildControls/BuildControls
 import styles from "./BurgerBuilder.module.css";
 import Backdrop from "./../../components/Layout/Backdrop/Backdrop";
 import axios from "./../../axios/axios";
-import { Spinner } from "./../../Spinner/Spinner";
+import withErrorHandler from "./../../withErrorHandler";
+import { Spinner } from "../../Spinner/Spinner";
 class BurgerBuilder extends Component {
   state = {
-    ingredients: [
-      { ingredient: "Cheese", type: "cheese", qty: 0, price: 3.23 },
-      { ingredient: "Bacon", type: "bacon", qty: 0, price: 7.29 },
-      { ingredient: "Salad", type: "salad", qty: 0, price: 6.13 },
-      { ingredient: "Meat", type: "meat", qty: 0, price: 1.28 },
-    ],
+    ingredients: [],
     isCheckingout: false,
     isOrderProcessing: false,
+    orderName: null,
   };
+
+  componentDidMount() {
+    const ingredients = [];
+    axios.get("/ingredients.json").then((response) => {
+      for (let key in response.data) {
+        for (let ingr in response.data[key]) {
+          ingredients.push(response.data[key][ingr]);
+        }
+      }
+      this.setState({ ingredients });
+    });
+  }
 
   handleCheckout = () => {
     const order = {
@@ -23,19 +32,10 @@ class BurgerBuilder extends Component {
       totalPrice: this.state.ingredients.reduce((acc, val) => {
         return (acc += val["price"] * val["qty"]);
       }, 0),
-      customer: {
-        name: "Maria Bagirova",
-        email: "text@test.com",
-        address: {
-          street: "112 Northtowne",
-          city: "NY City",
-          zipCode: "10200",
-        },
-      },
     };
     axios
       .post("/orders.json", order)
-      .then((response) => console.log(response))
+      .then((response) => this.setState({ orderName: response.data.name }))
       .catch((e) => console.log(e));
     this.setState({ isCheckingout: false, isOrderProcessing: true });
     this.showSpinnerEndCheckOut();
@@ -44,6 +44,10 @@ class BurgerBuilder extends Component {
   showSpinnerEndCheckOut = () => {
     setTimeout(() => {
       this.setState({ isOrderProcessing: false });
+      this.props.history.push({
+        pathname: "/checkout",
+        state: { message: this.state.orderName },
+      });
     }, 3000);
   };
 
@@ -74,7 +78,7 @@ class BurgerBuilder extends Component {
     this.setState({ ingredients });
   };
   render() {
-    return (
+    return this.state.ingredients.length ? (
       <div className={styles.Content}>
         {(this.state.isCheckingout || this.state.isOrderProcessing) && (
           <Backdrop handleHideBackdrop={this.handleCancelCheckout} />
@@ -92,8 +96,14 @@ class BurgerBuilder extends Component {
           handleRemoveIngredient={this.handleRemoveIngredient}
         />
       </div>
+    ) : (
+      <Backdrop>
+        <div className={styles.Spinner}>
+          <Spinner />
+        </div>
+      </Backdrop>
     );
   }
 }
 
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder, axios);

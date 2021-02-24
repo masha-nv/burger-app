@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./MenuLinks.module.css";
-
+import { NavLink } from "react-router-dom";
 const MenuLinks = () => {
   return (
     <nav className={styles.Menu}>
@@ -9,10 +9,13 @@ const MenuLinks = () => {
           <a href="#">Locations</a>
         </li>
         <li>
-          <a href="#">Orders</a>
+          <a href="/orders">Orders</a>
         </li>
         <li>
-          <a href="#">Menu</a>
+          <NavLink to="/menu">Menu</NavLink>
+        </li>
+        <li>
+          <NavLink to="/login">Sign In</NavLink>
         </li>
       </ul>
     </nav>

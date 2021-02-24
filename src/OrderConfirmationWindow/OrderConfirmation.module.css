@@ -1,0 +1,32 @@
+.OrderConfirmation {
+  position: absolute;
+  left: 50%;
+  top: -50%;
+  animation: dropDown 0.3s ease-in 0s 1 forwards;
+}
+
+.OrderConfirmation h1 {
+  color: #fff;
+  mix-blend-mode: multiply;
+}
+
+@keyframes dropDown {
+  from {
+    top: -50%;
+  }
+  to {
+    top: 20%;
+  }
+}
+
+.goBack {
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  border: none;
+  outline: none;
+  padding: 20px 50px;
+  margin-left: 20%;
+  margin-top: 20%;
+  cursor: pointer;
+}

@@ -1,0 +1,10 @@
+.withError {
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 150px;
+  margin-left: -150px;
+  margin-top: -105px;
+  background-color: rgba(255, 255, 255, 0.8);
+  position: absolute;
+}

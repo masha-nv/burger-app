@@ -1,15 +1,21 @@
 import React from "react";
 import styles from "./SideDrawer.module.css";
+import { Link } from "react-router-dom";
+import Avatar from "./../../../Avatar/Avatar";
 
 const SideDrawer = ({ handleCloseSideBar }) => {
   return (
     <div className={styles.SideDrawer}>
       <div className={styles.Header}>
-        <div className={styles.CloseButton} onClick={handleCloseSideBar}>
-          <div></div>
-          <div></div>
+        <Avatar>
+          <div className={styles.CloseButton} onClick={handleCloseSideBar}>
+            <div></div>
+            <div></div>
+          </div>
+        </Avatar>
+        <div className={styles.Logo}>
+          <Link to="/">BURGER BUILDER</Link>
         </div>
-        <div className={styles.Logo}>BURGER BUILDER</div>
       </div>
       <hr />
       <ul className={styles.List}>
@@ -17,10 +23,13 @@ const SideDrawer = ({ handleCloseSideBar }) => {
           <a href="#">Locations</a>
         </li>
         <li>
-          <a href="#">Orders</a>
+          <a href="/orders">Orders</a>
         </li>
         <li>
           <a href="#">Menu</a>
+        </li>
+        <li>
+          <Link to="/login">Login</Link>
         </li>
       </ul>
     </div>

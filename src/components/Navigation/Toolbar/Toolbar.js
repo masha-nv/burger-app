@@ -5,6 +5,7 @@ import Logo from "./../Logo/Logo";
 import MenuLinks from "./../MenuLinks/MenuLinks";
 import SideDrawer from "./../SideDrawer/SideDrawer";
 import Backdrop from "./../../Layout/Backdrop/Backdrop";
+import { Link } from "react-router-dom";
 
 class Toolbar extends Component {
   state = { isSideBarShowing: false };
@@ -21,7 +22,9 @@ class Toolbar extends Component {
           <Backdrop handleHideBackdrop={this.handleCloseSideBar} />
         )}
         <HamburgerIcon handleShowSideBar={this.handleShowSideBar} />
+        {/* <Link to="/"> */}
         <Logo />
+        {/* </Link> */}
         <MenuLinks />
         {this.state.isSideBarShowing && (
           <SideDrawer handleCloseSideBar={this.handleCloseSideBar} />

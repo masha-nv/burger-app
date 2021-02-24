@@ -1,15 +1,16 @@
 .Wrapper {
   cursor: pointer;
-  margin-left: 20px;
+  /* margin-left: 20px; */
   display: none;
 }
 
 .Wrapper > div {
   transition: 0.5s;
-  width: 30px;
-  height: 4px;
+  width: 100%;
+  /* width: 30px; */
+  height: 2px;
   background-color: black;
-  margin-bottom: 7px;
+  margin: 4px 0;
 }
 
 .Wrapper:hover div:nth-child(2) {
@@ -25,8 +26,14 @@
   /* transform: rotate(45deg) translate(-20px, -2px); */
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1000px) {
   .Wrapper {
     display: block;
+  }
+}
+
+@media (max-width: 678px) {
+  .HamburgerIcon {
+    margin-left: 10px;
   }
 }

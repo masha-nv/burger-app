@@ -11,6 +11,12 @@
   padding-right: 50px;
 }
 
+@media (max-width: 763px) {
+  .Wrapper h3 {
+    font-size: 0.8rem;
+  }
+}
+
 .Control {
   display: flex;
   justify-content: flex-end;

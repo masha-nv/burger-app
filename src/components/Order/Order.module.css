@@ -1,0 +1,31 @@
+.Order {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
+  color: #222;
+  margin-top: 20px;
+}
+.Order::after {
+  content: "";
+  display: block;
+  background-color: white;
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  margin-bottom: -25px;
+  bottom: 0;
+}
+.OrderInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.Order li {
+  list-style: none;
+  margin-bottom: 10px;
+}
+.Order ul {
+  padding-left: 0;
+}
