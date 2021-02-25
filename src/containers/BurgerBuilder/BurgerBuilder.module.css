@@ -22,7 +22,7 @@
   }
 }
 
-.Spinner {
-  margin-top: 700px;
+.Spinner > div {
+  top: 200px;
   margin-left: 300px;
 }

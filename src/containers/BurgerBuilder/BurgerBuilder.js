@@ -6,38 +6,42 @@ import Backdrop from "./../../components/Layout/Backdrop/Backdrop";
 import axios from "./../../axios/axios";
 import withErrorHandler from "./../../withErrorHandler";
 import { Spinner } from "../../Spinner/Spinner";
+import { connect } from "react-redux";
+import * as actionTypes from "../../store/action";
 class BurgerBuilder extends Component {
   state = {
-    ingredients: [],
+    // ingredients: [],
     isCheckingout: false,
     isOrderProcessing: false,
-    orderName: null,
+    order: null,
   };
 
   componentDidMount() {
     const ingredients = [];
-    axios.get("/ingredients.json").then((response) => {
-      for (let key in response.data) {
-        for (let ingr in response.data[key]) {
-          ingredients.push(response.data[key][ingr]);
-        }
-      }
-      this.setState({ ingredients });
-    });
+    // axios.get("/ingredients.json").then((response) => {
+    //   for (let key in response.data) {
+    //     for (let ingr in response.data[key]) {
+    //       ingredients.push(response.data[key][ingr]);
+    //     }
+    //   }
+    //   this.setState({ ingredients });
+    // }
+    // );
   }
 
   handleCheckout = () => {
     const order = {
-      ingredients: this.state.ingredients,
-      totalPrice: this.state.ingredients.reduce((acc, val) => {
+      ingredients: this.props.ingrs,
+      totalPrice: this.props.ingrs.reduce((acc, val) => {
         return (acc += val["price"] * val["qty"]);
       }, 0),
+      id: Math.random(),
     };
-    axios
-      .post("/orders.json", order)
-      .then((response) => this.setState({ orderName: response.data.name }))
-      .catch((e) => console.log(e));
-    this.setState({ isCheckingout: false, isOrderProcessing: true });
+    // axios
+    //   .post("/orders.json", order)
+    //   .then((response) => this.setState({ orderName: response.data.name }))
+    //   .catch((e) => console.log(e));
+    this.setState({ isCheckingout: false, isOrderProcessing: true, order });
     this.showSpinnerEndCheckOut();
   };
 
@@ -46,7 +50,7 @@ class BurgerBuilder extends Component {
       this.setState({ isOrderProcessing: false });
       this.props.history.push({
         pathname: "/checkout",
-        state: { message: this.state.orderName },
+        state: this.state.order,
       });
     }, 3000);
   };
@@ -58,32 +62,32 @@ class BurgerBuilder extends Component {
   handlePlaceOrder = () => {
     this.setState({ isCheckingout: true });
   };
-  handleAddIngredient = (type) => {
-    const ingredients = this.state.ingredients.map((ingredient) =>
-      ingredient.type === type
-        ? { ...ingredient, qty: ingredient.qty + 1 }
-        : ingredient
-    );
+  // handleAddIngredient = (type) => {
+  //   const ingredients = this.state.ingredients.map((ingredient) =>
+  //     ingredient.type === type
+  //       ? { ...ingredient, qty: ingredient.qty + 1 }
+  //       : ingredient
+  //   );
 
-    this.setState({ ingredients });
-  };
+  //   this.setState({ ingredients });
+  // };
 
-  handleRemoveIngredient = (type) => {
-    const ingredients = this.state.ingredients.map((ingredient) =>
-      ingredient.type === type && ingredient.qty > 0
-        ? { ...ingredient, qty: ingredient.qty - 1 }
-        : ingredient
-    );
+  // handleRemoveIngredient = (type) => {
+  //   const ingredients = this.state.ingredients.map((ingredient) =>
+  //     ingredient.type === type && ingredient.qty > 0
+  //       ? { ...ingredient, qty: ingredient.qty - 1 }
+  //       : ingredient
+  //   );
 
-    this.setState({ ingredients });
-  };
+  //   this.setState({ ingredients });
+  // };
   render() {
-    return this.state.ingredients.length ? (
+    return this.props.ingrs.length ? (
       <div className={styles.Content}>
         {(this.state.isCheckingout || this.state.isOrderProcessing) && (
           <Backdrop handleHideBackdrop={this.handleCancelCheckout} />
         )}
-        <Burger ingredients={this.state.ingredients} />
+        <Burger ingredients={this.props.ingrs} />
         <BuildControls
           isOrderProcessing={this.state.isOrderProcessing}
           handleCheckout={this.handleCheckout}
@@ -91,9 +95,9 @@ class BurgerBuilder extends Component {
           handlePlaceOrder={this.handlePlaceOrder}
           isCheckingout={this.state.isCheckingout}
           price={this.state.price}
-          ingredients={this.state.ingredients}
-          handleAddIngredient={this.handleAddIngredient}
-          handleRemoveIngredient={this.handleRemoveIngredient}
+          ingredients={this.props.ingrs}
+          handleAddIngredient={this.props.addIngredient}
+          handleRemoveIngredient={this.props.removeIngredient}
         />
       </div>
     ) : (
@@ -106,4 +110,22 @@ class BurgerBuilder extends Component {
   }
 }
 
-export default withErrorHandler(BurgerBuilder, axios);
+const mapStateToProps = (state) => {
+  return {
+    ingrs: state.ingredients,
+  };
+};
+
+const dispatchToProps = (dispatch) => {
+  return {
+    addIngredient: (ingrType) =>
+      dispatch({ type: actionTypes.ADD_INGREDIENT, ingrType }),
+    removeIngredient: (ingrType) =>
+      dispatch({ type: actionTypes.REMOVE_INGREDIENT, ingrType }),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  dispatchToProps
+)(withErrorHandler(BurgerBuilder, axios));
