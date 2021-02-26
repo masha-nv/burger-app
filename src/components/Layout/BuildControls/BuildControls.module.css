@@ -56,7 +56,13 @@
   outline: none;
   transition: 0.3s;
 }
-
+@media (max-width: 768px) {
+  .Order {
+    padding: 13px;
+    font-size: 0.9rem;
+    letter-spacing: 0;
+  }
+}
 .Order:hover {
   background-color: #a61920;
   color: #fff;

@@ -2,43 +2,14 @@ import React, { Component } from "react";
 import Burger from "./../Layout/Burger/Burger";
 import styles from "./CheckoutSummary.module.css";
 import { connect } from "react-redux";
-import axios from "../../axios/axios";
-import { Spinner } from "../../Spinner/Spinner";
-import { Route } from "react-router-dom";
-import LoginForm from "./../../containers/LoginForm/LoginForm";
 
 class CheckoutSummary extends Component {
-  // state = { order: null };
-  // componentDidMount() {
-  // const query = new URLSearchParams(this.props.location.search);
-  // console.log("QUERY", query.entries());
-  // const ingredient = {};
-  // const order = {};
-  // for (let param of query.entries()) {
-  //   console.log("PARAM", param);
-  //   ingredient[param[0]] = param[1];
-  //   console.log(ingredient);
-  //   console.log("ORDER", order);
-  // }
-  // const orders = [];
-  //   axios.get("/orders.json").then((response) => {
-  //     for (let key in response.data) {
-  //       orders.push({ ...response.data[key], id: key });
-  //     }
-  //     const order = orders.find(
-  //       (order) => order.id === this.props.location.state.order
-  //     );
-  //     this.setState({ order });
-  //   });
-  // }
   render() {
-    console.log(this.props);
-
     const totalPrice = this.props.ingrs.reduce((acc, val) => {
       return (acc += val["price"] * val["qty"]);
     }, 0);
-    // const order = this.props.location.state;
-    // const { order } = this.state;
+    console.log(totalPrice);
+
     return (
       <div className={styles.CheckoutSummary}>
         <h1>
@@ -56,23 +27,20 @@ class CheckoutSummary extends Component {
         </div>
         <div className={styles.OrderDetails}>
           <div className={styles.Ingredients}>
-            {this.props.ingrs.map((ingr) => (
-              <li>{ingr.ingredient}</li>
+            {this.props.ingrs.map((ingr, i) => (
+              <li key={ingr + i}>{ingr.ingredient}</li>
             ))}
           </div>
           <div className={styles.Prices}>
-            {this.props.ingrs.map((ingr) => (
-              <li>${ingr.price * ingr.qty}</li>
+            {this.props.ingrs.map((ingr, i) => (
+              <li key={ingr + i}>${ingr.price * ingr.qty}</li>
             ))}
           </div>
         </div>
         <button
           className={styles.CheckoutBtn}
           onClick={() => {
-            this.props.history.push({
-              pathname: "/login",
-              state: { ingredients: this.props.ingrs, totalPrice },
-            });
+            this.props.history.push("/login");
           }}
         >
           Checkout <span>${parseFloat(totalPrice).toFixed(2)}</span>
@@ -84,7 +52,7 @@ class CheckoutSummary extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    ingrs: state.ingredients,
+    ingrs: state.burgerR.ingredients,
   };
 };
 

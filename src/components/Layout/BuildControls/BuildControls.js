@@ -57,4 +57,11 @@ const BuildControls = ({
   );
 };
 
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     removeIngredient: (ingrType) => dispatch(remove_ingredient(ingrType)),
+//     removeIngredient: (ingrType) => dispatch(remove_ingredient(ingrType)),
+//   };
+// };
+
 export default BuildControls;

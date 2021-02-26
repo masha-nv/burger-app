@@ -13,7 +13,12 @@ const OrderConfirmation = (props) => {
         >
           All Orders
         </button>
-        <button className={styles.goBack}>Home</button>
+        <button
+          onClick={() => props.history.push("/")}
+          className={styles.goBack}
+        >
+          Home
+        </button>
       </Modal>
     </div>
   );

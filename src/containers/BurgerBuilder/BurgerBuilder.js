@@ -7,94 +7,96 @@ import axios from "./../../axios/axios";
 import withErrorHandler from "./../../withErrorHandler";
 import { Spinner } from "../../Spinner/Spinner";
 import { connect } from "react-redux";
-import * as actionTypes from "../../store/action";
+import { calcPrice } from "../../utils/calcPrice";
+import {
+  add_ingredient,
+  remove_ingredient,
+  asyncSetIngredientsState,
+} from "../../store/actions/burgerBuilderActionCreators";
+
+import {
+  asyncHandleCheckout,
+  placeOrder,
+  cancelCheckout,
+} from "../../store/actions/orderActionCreators";
+// import { createBrowserHistory } from "history";
+
+// const history = createBrowserHistory();
+// console.log("HISTORY", history);
+
 class BurgerBuilder extends Component {
-  state = {
-    // ingredients: [],
-    isCheckingout: false,
-    isOrderProcessing: false,
-    order: null,
-  };
+  // state = {
+  //   isCheckingout: false,
+  //   isOrderProcessing: false,
+  //   order: null,
+  // };
 
   componentDidMount() {
     const ingredients = [];
-    // axios.get("/ingredients.json").then((response) => {
-    //   for (let key in response.data) {
-    //     for (let ingr in response.data[key]) {
-    //       ingredients.push(response.data[key][ingr]);
-    //     }
-    //   }
-    //   this.setState({ ingredients });
-    // }
-    // );
+    axios.get("/ingredients.json").then((response) => {
+      for (let key in response.data) {
+        for (let ingr in response.data[key]) {
+          ingredients.push(response.data[key][ingr]);
+        }
+      }
+      this.props.onSetIngredientsState(ingredients);
+      // this.setState({ ingredients });
+    });
   }
 
-  handleCheckout = () => {
-    const order = {
-      ingredients: this.props.ingrs,
-      totalPrice: this.props.ingrs.reduce((acc, val) => {
-        return (acc += val["price"] * val["qty"]);
-      }, 0),
-      id: Math.random(),
-    };
-    // axios
-    //   .post("/orders.json", order)
-    //   .then((response) => this.setState({ orderName: response.data.name }))
-    //   .catch((e) => console.log(e));
-    this.setState({ isCheckingout: false, isOrderProcessing: true, order });
-    this.showSpinnerEndCheckOut();
-  };
+  price = calcPrice(this.props.ingrs);
 
-  showSpinnerEndCheckOut = () => {
-    setTimeout(() => {
-      this.setState({ isOrderProcessing: false });
-      this.props.history.push({
-        pathname: "/checkout",
-        state: this.state.order,
-      });
-    }, 3000);
-  };
-
-  handleCancelCheckout = () => {
-    this.setState({ isCheckingout: false });
-  };
-
-  handlePlaceOrder = () => {
-    this.setState({ isCheckingout: true });
-  };
-  // handleAddIngredient = (type) => {
-  //   const ingredients = this.state.ingredients.map((ingredient) =>
-  //     ingredient.type === type
-  //       ? { ...ingredient, qty: ingredient.qty + 1 }
-  //       : ingredient
-  //   );
-
-  //   this.setState({ ingredients });
+  // handleCheckout = () => {
+  //   const order = {
+  //     ingredients: this.props.ingrs,
+  //     totalPrice: calcPrice(this.props.ingrs),
+  //     id: Math.random(),
+  //   };
+  //   this.setState({ isCheckingout: false, isOrderProcessing: true, order });
+  //   setTimeout(() => {
+  //     this.setState({ isOrderProcessing: false });
+  //     this.props.history.push({
+  //       pathname: "/checkout",
+  //       state: this.state.order,
+  //     });
+  //   }, 1000);
+  // this.showSpinnerEndCheckOut();
   // };
 
-  // handleRemoveIngredient = (type) => {
-  //   const ingredients = this.state.ingredients.map((ingredient) =>
-  //     ingredient.type === type && ingredient.qty > 0
-  //       ? { ...ingredient, qty: ingredient.qty - 1 }
-  //       : ingredient
-  //   );
-
-  //   this.setState({ ingredients });
+  // showSpinnerEndCheckOut = () => {
+  //   setTimeout(() => {
+  //     this.setState({ isOrderProcessing: false });
+  //     this.props.history.push({
+  //       pathname: "/checkout",
+  //       state: this.state.order,
+  //     });
+  //   }, 1000);
   // };
+
+  // handleCancelCheckout = () => {
+  //   this.setState({ isCheckingout: false });
+  // };
+
+  // handlePlaceOrder = () => {
+  //   this.setState({ isCheckingout: true });
+  // };
+
   render() {
     return this.props.ingrs.length ? (
       <div className={styles.Content}>
-        {(this.state.isCheckingout || this.state.isOrderProcessing) && (
-          <Backdrop handleHideBackdrop={this.handleCancelCheckout} />
+        {(this.props.isCheckingout || this.props.isOrderProcessing) && (
+          <Backdrop handleHideBackdrop={this.props.onCancelCheckout} />
         )}
         <Burger ingredients={this.props.ingrs} />
         <BuildControls
-          isOrderProcessing={this.state.isOrderProcessing}
-          handleCheckout={this.handleCheckout}
-          handleCancelCheckout={this.handleCancelCheckout}
-          handlePlaceOrder={this.handlePlaceOrder}
-          isCheckingout={this.state.isCheckingout}
-          price={this.state.price}
+          isOrderProcessing={this.props.isOrderProcessing}
+          handleCheckout={() =>
+            this.props.onHandleCheckout(this.props.ingrs, this.props.history)
+          }
+          handleCancelCheckout={this.props.onCancelCheckout}
+          handlePlaceOrder={this.props.onPlaceOrder}
+          isCheckingout={this.props.isCheckingout}
+          price={this.price}
           ingredients={this.props.ingrs}
           handleAddIngredient={this.props.addIngredient}
           handleRemoveIngredient={this.props.removeIngredient}
@@ -111,21 +113,29 @@ class BurgerBuilder extends Component {
 }
 
 const mapStateToProps = (state) => {
+  console.log("MAP STATE TO PROPS", state);
   return {
-    ingrs: state.ingredients,
+    ingrs: state.burgerR.ingredients,
+    isCheckingout: state.orderR.isCheckingout,
+    isOrderProcessing: state.orderR.isOrderProcessing,
+    order: state.orderR.order,
   };
 };
 
-const dispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    addIngredient: (ingrType) =>
-      dispatch({ type: actionTypes.ADD_INGREDIENT, ingrType }),
-    removeIngredient: (ingrType) =>
-      dispatch({ type: actionTypes.REMOVE_INGREDIENT, ingrType }),
+    addIngredient: (ingrType) => dispatch(add_ingredient(ingrType)),
+    removeIngredient: (ingrType) => dispatch(remove_ingredient(ingrType)),
+    onSetIngredientsState: (ingredients) =>
+      dispatch(asyncSetIngredientsState(ingredients)),
+    onHandleCheckout: (ingredients, history) =>
+      dispatch(asyncHandleCheckout(ingredients, history)),
+    onPlaceOrder: () => dispatch(placeOrder()),
+    onCancelCheckout: () => dispatch(cancelCheckout()),
   };
 };
 
 export default connect(
   mapStateToProps,
-  dispatchToProps
+  mapDispatchToProps
 )(withErrorHandler(BurgerBuilder, axios));

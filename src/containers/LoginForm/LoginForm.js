@@ -5,6 +5,7 @@ import axios from "../../axios/axios";
 import OrderConfirmation from "../../OrderConfirmationWindow/OrderConfirmation";
 import Backdrop from "./../../components/Layout/Backdrop/Backdrop";
 import Input from "./../../components/Input/Input";
+import { connect } from "react-redux";
 import { Route } from "react-router-dom";
 import Orders from "./../Orders/Orders";
 
@@ -28,14 +29,14 @@ class LoginForm extends Component {
       for (let key in val) {
         key === "errorMessage" && acc.push(val[key]);
       }
-      console.log(acc);
+      // console.log(acc);
       return acc;
     }, []);
     const msgType = [];
     result.forEach((res) => {
       msgType.push(res.type);
     });
-    console.log("RESULT", msgType);
+    // console.log("RESULT", msgType);
     return msgType.every((msg) => msg === "success");
   };
 
@@ -104,9 +105,10 @@ class LoginForm extends Component {
 
   handlePlaceOrder = (e) => {
     e.preventDefault();
-
-    const order = { ...this.state, ...this.props.location.state };
-    console.log("LOCATION", this.props.location.state);
+    const totalPrice = this.props.ingrs.reduce((acc, val) => {
+      return (acc += val["price"] * val["qty"]);
+    }, 0);
+    const order = { ...this.state, totalPrice, ingredients: this.props.ingrs };
     axios
       .post("/myOrders.json", order)
       .then(() => {
@@ -125,7 +127,7 @@ class LoginForm extends Component {
 
   render() {
     const res = this.isFormValid();
-    console.log(res);
+    // console.log(res);
 
     const { isValid } = this.state;
     const inputs = [];
@@ -175,4 +177,10 @@ class LoginForm extends Component {
   }
 }
 
-export default LoginForm;
+const mapStateToProps = (state) => {
+  return {
+    ingrs: state.burgerR.ingredients,
+  };
+};
+
+export default connect(mapStateToProps)(LoginForm);
