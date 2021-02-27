@@ -5,9 +5,7 @@ const initialState = {
   authFail: false,
   errorMessage: "",
   isSignUp: true,
-  // userId: "",
-  idToken: JSON.parse(window.localStorage.getItem("userId")),
-  // localId: "",
+  idToken: window.localStorage.getItem("userId"),
 };
 
 const authReducer = (state = initialState, action) => {
@@ -24,9 +22,7 @@ const authReducer = (state = initialState, action) => {
         isLoggingIn: false,
         authFail: false,
         isSignUp: true,
-        // userId: action.userId,
         idToken: action.idToken,
-        // localId: action.localId,
       };
 
     case actionTypes.AUTH_FAIL:
