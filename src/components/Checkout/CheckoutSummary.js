@@ -8,7 +8,6 @@ class CheckoutSummary extends Component {
     const totalPrice = this.props.ingrs.reduce((acc, val) => {
       return (acc += val["price"] * val["qty"]);
     }, 0);
-    console.log(totalPrice);
 
     return (
       <div className={styles.CheckoutSummary}>
@@ -40,7 +39,12 @@ class CheckoutSummary extends Component {
         <button
           className={styles.CheckoutBtn}
           onClick={() => {
-            this.props.history.push("/login");
+            this.props.token
+              ? this.props.history.push("/contact")
+              : this.props.history.push({
+                  pathname: "/auth",
+                  state: this.props.location.pathname,
+                });
           }}
         >
           Checkout <span>${parseFloat(totalPrice).toFixed(2)}</span>
@@ -53,6 +57,7 @@ class CheckoutSummary extends Component {
 const mapStateToProps = (state) => {
   return {
     ingrs: state.burgerR.ingredients,
+    token: state.authR.idToken,
   };
 };
 

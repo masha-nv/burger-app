@@ -3,12 +3,16 @@ import styles from "./Input.module.css";
 
 const Input = (props) => {
   //   console.log("INPUT PROPS", props.errorMessage);
-  const { inputtype, htmlFor, id, label, name, type } = props.inputInfo;
+  const { inputtype, htmlFor, label, name } = props.inputInfo;
   let inputElement = null;
   switch (inputtype) {
     case "input":
       inputElement = (
-        <input {...props} onChange={(e) => props.handleChange(name, e)} />
+        <input
+          minLength={name === "password:" && "6"}
+          {...props}
+          onChange={(e) => props.handleChange(name, e)}
+        />
       );
       break;
     case "text-area":

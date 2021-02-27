@@ -1,13 +1,17 @@
 import React from "react";
 import styles from "./MenuLinks.module.css";
 import { NavLink } from "react-router-dom";
-const MenuLinks = () => {
+import { connect } from "react-redux";
+import { signOut } from "../../../store/actions/authActionCreators";
+
+const MenuLinks = (props) => {
+  // console.log(this.props);
   return (
     <nav className={styles.Menu}>
       <ul className={styles.List}>
         <li>
           <NavLink activeClassName={styles.Active} exact to="/">
-            Locations
+            Home
           </NavLink>
         </li>
         <li>
@@ -15,19 +19,34 @@ const MenuLinks = () => {
             Orders
           </NavLink>
         </li>
-        <li>
-          <NavLink activeClassName={styles.Active} to="/menu">
-            Menu
-          </NavLink>
-        </li>
-        <li>
-          <NavLink activeClassName={styles.Active} to="/login">
-            Sign In
-          </NavLink>
-        </li>
+        {props.isSignedIn ? (
+          <li onClick={props.signOut}>
+            <NavLink activeClassName={styles.Active} to="/auth">
+              Sign Out
+            </NavLink>
+          </li>
+        ) : (
+          <li>
+            <NavLink activeClassName={styles.Active} to="/auth">
+              Signin/Signup
+            </NavLink>
+          </li>
+        )}
       </ul>
     </nav>
   );
 };
 
-export default MenuLinks;
+const mapStateToProps = (state) => {
+  return {
+    isSignedIn: state.authR.idToken,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signOut: () => dispatch(signOut()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MenuLinks);

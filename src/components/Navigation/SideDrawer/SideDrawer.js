@@ -2,8 +2,10 @@ import React from "react";
 import styles from "./SideDrawer.module.css";
 import { Link } from "react-router-dom";
 import Avatar from "./../../../Avatar/Avatar";
+import { connect } from "react-redux";
+import { signOut } from "../../../store/actions/authActionCreators";
 
-const SideDrawer = ({ handleCloseSideBar }) => {
+const SideDrawer = ({ handleCloseSideBar, isSignedIn, signOut }) => {
   return (
     <div className={styles.SideDrawer}>
       <div className={styles.Header}>
@@ -20,20 +22,35 @@ const SideDrawer = ({ handleCloseSideBar }) => {
       <hr />
       <ul className={styles.List}>
         <li>
-          <a href="#">Locations</a>
+          <a href="/">Home</a>
         </li>
         <li>
           <a href="/orders">Orders</a>
         </li>
-        <li>
-          <a href="#">Menu</a>
-        </li>
-        <li>
-          <Link to="/login">Login</Link>
-        </li>
+        {isSignedIn ? (
+          <li onClick={signOut}>
+            <Link to="/auth">Sign out</Link>
+          </li>
+        ) : (
+          <li>
+            <Link to="/auth">Sign in/Sign up</Link>
+          </li>
+        )}
       </ul>
     </div>
   );
 };
 
-export default SideDrawer;
+const mapStateToProps = (state) => {
+  return {
+    isSignedIn: state.authR.idToken,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signOut: () => dispatch(signOut()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SideDrawer);

@@ -4,6 +4,7 @@ const initialState = {
   isCheckingout: false,
   isOrderProcessing: false,
   order: null,
+  orders: [],
 };
 
 const orderReducer = (state = initialState, action) => {
@@ -31,6 +32,12 @@ const orderReducer = (state = initialState, action) => {
       return {
         ...state,
         isCheckingout: false,
+      };
+    }
+    case actionTypes.FETCH_ALL_ORDERS: {
+      return {
+        ...state,
+        orders: action.orders,
       };
     }
     default:

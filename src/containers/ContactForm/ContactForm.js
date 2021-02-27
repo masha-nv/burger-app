@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import Avatar from "../../Avatar/Avatar";
-import styles from "./LoginForm.module.css";
+import styles from "./ContactForm.module.css";
 import axios from "../../axios/axios";
 import OrderConfirmation from "../../OrderConfirmationWindow/OrderConfirmation";
-import Backdrop from "./../../components/Layout/Backdrop/Backdrop";
-import Input from "./../../components/Input/Input";
+import Backdrop from "../../components/Layout/Backdrop/Backdrop";
+import Input from "../../components/Input/Input";
 import { connect } from "react-redux";
 import { Route } from "react-router-dom";
-import Orders from "./../Orders/Orders";
+import Orders from "../Orders/Orders";
 
-class LoginForm extends Component {
+class ContactForm extends Component {
   state = {
     firstName: { value: "", errorMessage: "" },
     lastName: { value: "", errorMessage: "" },
@@ -109,8 +109,9 @@ class LoginForm extends Component {
       return (acc += val["price"] * val["qty"]);
     }, 0);
     const order = { ...this.state, totalPrice, ingredients: this.props.ingrs };
+    console.log("CONTACT FORM", "/myOrders.json?auth=" + this.props.token);
     axios
-      .post("/myOrders.json", order)
+      .post("/myOrders.json?auth=" + this.props.token, order)
       .then(() => {
         this.setState({
           firstName: { value: "", errorMessage: "" },
@@ -122,12 +123,15 @@ class LoginForm extends Component {
           isValid: false,
         });
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        this.props.history.push("/auth");
+      });
   };
 
   render() {
     const res = this.isFormValid();
     // console.log(res);
+    console.log("CONTACT FORM", "/myOrders.json?auth=" + this.props.token);
 
     const { isValid } = this.state;
     const inputs = [];
@@ -180,7 +184,8 @@ class LoginForm extends Component {
 const mapStateToProps = (state) => {
   return {
     ingrs: state.burgerR.ingredients,
+    token: state.authR.idToken,
   };
 };
 
-export default connect(mapStateToProps)(LoginForm);
+export default connect(mapStateToProps)(ContactForm);

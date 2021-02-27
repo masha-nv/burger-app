@@ -1,4 +1,5 @@
 import * as actionTypes from "./actionTypes";
+import axios from "../../axios/axios";
 
 export const handleCheckout = (ingredients) => {
   return {
@@ -33,5 +34,29 @@ export const placeOrder = () => {
 export const cancelCheckout = () => {
   return {
     type: actionTypes.CANCEL_CHECKOUT,
+  };
+};
+
+export const fetchAllOrders = (orders) => {
+  return {
+    type: actionTypes.FETCH_ALL_ORDERS,
+    orders: orders,
+  };
+};
+
+export const asyncFetchAllOrders = (localId) => {
+  return (dispatch) => {
+    const orders = [];
+    axios
+      .get("/myOrders.json?auth=" + localId)
+      .then((response) => {
+        console.log("RESPONSE", response);
+        const result = Object.entries(response.data);
+        for (let i = 0; i < result.length; i++) {
+          orders.push({ ...result[i][1], id: result[i][0] });
+        }
+        dispatch(fetchAllOrders(orders));
+      })
+      .catch((e) => console.log(e));
   };
 };

@@ -10,7 +10,9 @@ const Logo = () => {
       <div className={styles.Logo}>
         <Link to="/">BURGER BUILDER</Link>
       </div>
-      <img src={LogoImg} className={styles.LogoImage} alt="logo" />
+      <Link to="/">
+        <img src={LogoImg} className={styles.LogoImage} alt="logo" />
+      </Link>
     </>
   );
 };
