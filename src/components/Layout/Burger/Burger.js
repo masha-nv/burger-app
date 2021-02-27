@@ -26,9 +26,9 @@ const Burger = SortableContainer(({ ingredients }) => {
     );
   return (
     <div className={styles.Content}>
-      <BurgerIngredient type="bread-top" />
+      <BurgerIngredient type="bread-top" disabled={true} />
       {ingrs}
-      <BurgerIngredient type="bread-bottom" />
+      <BurgerIngredient type="bread-bottom" disabled={true} />
     </div>
   );
 });

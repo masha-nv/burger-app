@@ -87,6 +87,10 @@
   margin: 0.9% auto;
   border-radius: 15px;
 }
+.Meat:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
 
 .Cheese {
   width: 90%;
@@ -94,6 +98,11 @@
   margin: 0.7% auto;
   background: linear-gradient(#f4d004, #d6bb22);
   border-radius: 20px;
+}
+
+.Cheese:hover {
+  opacity: 0.8;
+  cursor: pointer;
 }
 
 .Salad {
@@ -104,9 +113,19 @@
   border-radius: 20px;
 }
 
+.Salad:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
 .Bacon {
   width: 80%;
   height: 3%;
   background: linear-gradient(#bf3813, #c45e38);
   margin: 0.2% auto;
+}
+
+.Bacon:hover {
+  opacity: 0.8;
+  cursor: pointer;
 }
