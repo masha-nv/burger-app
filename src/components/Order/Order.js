@@ -1,10 +1,7 @@
 import React from "react";
 import styles from "./Order.module.css";
-import { connect } from "react-redux";
-// import { asyncRemoveOrder } from "../../store/actions/orderActionCreators";
 
 const Order = ({ order }) => {
-  console.log("ONE ORDER", order.id);
   return (
     <summary className={styles.Order}>
       <div className={styles.OrderInfo}>
@@ -26,9 +23,6 @@ const Order = ({ order }) => {
         <p>
           {order.firstName.value} {order.lastName.value}
         </p>
-      </div>
-      <div className={styles.OrderInfo}>
-        <h4>Remove Order</h4>
       </div>
     </summary>
   );

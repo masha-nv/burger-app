@@ -23,6 +23,12 @@ class App extends Component {
           <Route path="/orders" component={Orders} />
           <Route path="/auth" component={Auth} />
           <Route path="/signin" component={Auth} />
+          <Route
+            path="*"
+            render={() => (
+              <h1 style={{ marginTop: "20%" }}>This page does not exist</h1>
+            )}
+          />
         </Switch>
       </Layout>
     );

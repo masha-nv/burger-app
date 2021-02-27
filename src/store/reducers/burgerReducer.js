@@ -1,4 +1,5 @@
 import * as actionType from "../actions/actionTypes";
+import arrayMove from "array-move";
 
 const initialState = {
   ingredients: [],
@@ -17,7 +18,7 @@ const reducer = (state = initialState, action) => {
         ingredients,
       };
     }
-    case actionType.REMOVE_INGREDIENT: {
+    case actionType.REMOVE_INGREDIENT:
       const ingredients = state.ingredients.map((ingredient) =>
         ingredient.type === action.ingrType
           ? { ...ingredient, qty: ingredient.qty - 1 }
@@ -27,13 +28,23 @@ const reducer = (state = initialState, action) => {
         ...state,
         ingredients,
       };
-    }
-    case actionType.SET_INGREDIENTS_STATE: {
+
+    case actionType.SET_INGREDIENTS_STATE:
       return {
         ...state,
         ingredients: action.ingredients,
       };
-    }
+
+    case actionType.SORT_END:
+      return {
+        ...state,
+        ingredients: arrayMove(
+          state.ingredients,
+          action.oldIndex,
+          action.newIndex
+        ),
+      };
+
     default:
       return state;
   }

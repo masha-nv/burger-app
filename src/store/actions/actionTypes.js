@@ -13,4 +13,5 @@ export const AUTH_FAIL = "AUTH_FAIL";
 export const COMPONENT_MOUNT = "COMPONENT_MOUNT";
 export const SWITCH_AUTH = "SWITCH_AUTH";
 export const SIGN_OUT = "SIGN_OUT";
-export const REMOVE_ORDER = "REMOVE_ORDER";
+export const ORDER_PLACE = "ORDER_PLACE";
+export const SORT_END = "SORT_END";

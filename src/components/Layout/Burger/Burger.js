@@ -1,8 +1,9 @@
 import React from "react";
 import BurgerIngredient from "./BurgerIngredient/BurgerIngredient";
 import styles from "./Burger.module.css";
+import { SortableContainer } from "react-sortable-hoc";
 
-const Burger = ({ ingredients }) => {
+const Burger = SortableContainer(({ ingredients }) => {
   const getIngredients = () => {
     const burgerIngredients = [];
     for (let ingr of ingredients) {
@@ -18,7 +19,7 @@ const Burger = ({ ingredients }) => {
   let ingrs =
     getIngredients().length > 0 ? (
       getIngredients().map((ingr, i) => (
-        <BurgerIngredient key={ingr + i} type={ingr} />
+        <BurgerIngredient index={i} value={ingr} key={ingr + i} type={ingr} />
       ))
     ) : (
       <p>Please add ingredients</p>
@@ -30,6 +31,6 @@ const Burger = ({ ingredients }) => {
       <BurgerIngredient type="bread-bottom" />
     </div>
   );
-};
+});
 
 export default Burger;

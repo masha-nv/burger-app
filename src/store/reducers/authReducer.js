@@ -5,6 +5,7 @@ const initialState = {
   authFail: false,
   errorMessage: "",
   isSignUp: true,
+  userId: window.localStorage.getItem("userEmail"),
   idToken: window.localStorage.getItem("userId"),
 };
 
@@ -23,6 +24,7 @@ const authReducer = (state = initialState, action) => {
         authFail: false,
         isSignUp: true,
         idToken: action.idToken,
+        userId: action.userId,
       };
 
     case actionTypes.AUTH_FAIL:
@@ -49,6 +51,7 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         idToken: JSON.parse(window.localStorage.getItem("userId")),
+        userId: JSON.parse(window.localStorage.getItem("userId")),
       };
     default:
       return state;

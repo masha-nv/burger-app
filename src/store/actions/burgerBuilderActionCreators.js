@@ -25,12 +25,20 @@ export const asyncSetIngredientsState = (ingredients) => {
   return (dispatch) => dispatch(setIngredientsState(ingredients));
 };
 
-export const loginPlaceOrder = () => {
-  return {
-    type: actionTypes.LOGIN_PLACE_ORDER,
-  };
-};
+// export const loginPlaceOrder = () => {
+//   return {
+//     type: actionTypes.LOGIN_PLACE_ORDER,
+//   };
+// };
 
-export const asyncLoginPlaceOrder = () => {
-  return (dispatch) => {};
+// export const asyncLoginPlaceOrder = () => {
+//   return (dispatch) => {};
+// };
+
+export const sortEnd = ({ oldIndex, newIndex }) => {
+  return {
+    type: actionTypes.SORT_END,
+    oldIndex,
+    newIndex,
+  };
 };

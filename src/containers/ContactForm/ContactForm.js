@@ -108,8 +108,12 @@ class ContactForm extends Component {
     const totalPrice = this.props.ingrs.reduce((acc, val) => {
       return (acc += val["price"] * val["qty"]);
     }, 0);
-    const order = { ...this.state, totalPrice, ingredients: this.props.ingrs };
-    console.log("CONTACT FORM", "/myOrders.json?auth=" + this.props.token);
+    const order = {
+      ...this.state,
+      totalPrice,
+      ingredients: this.props.ingrs,
+      userId: this.props.userId,
+    };
     axios
       .post("/myOrders.json?auth=" + this.props.token, order)
       .then(() => {
@@ -185,6 +189,7 @@ const mapStateToProps = (state) => {
   return {
     ingrs: state.burgerR.ingredients,
     token: state.authR.idToken,
+    userId: state.authR.userId,
   };
 };
 

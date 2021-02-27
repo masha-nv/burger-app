@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./BurgerIngredient.module.css";
 import PropTypes from "prop-types";
+import { SortableElement } from "react-sortable-hoc";
 
 const BurgerIngredient = ({ type }) => {
   let ingredient = null;
@@ -39,4 +40,4 @@ BurgerIngredient.propTypes = {
   type: PropTypes.string.isRequired,
 };
 
-export default BurgerIngredient;
+export default SortableElement(BurgerIngredient);

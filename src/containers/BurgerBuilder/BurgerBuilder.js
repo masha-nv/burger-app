@@ -12,6 +12,7 @@ import {
   add_ingredient,
   remove_ingredient,
   asyncSetIngredientsState,
+  sortEnd,
 } from "../../store/actions/burgerBuilderActionCreators";
 
 import {
@@ -19,18 +20,8 @@ import {
   placeOrder,
   cancelCheckout,
 } from "../../store/actions/orderActionCreators";
-// import { createBrowserHistory } from "history";
-
-// const history = createBrowserHistory();
-// console.log("HISTORY", history);
 
 class BurgerBuilder extends Component {
-  // state = {
-  //   isCheckingout: false,
-  //   isOrderProcessing: false,
-  //   order: null,
-  // };
-
   componentDidMount() {
     const ingredients = [];
     axios.get("/ingredients.json").then((response) => {
@@ -40,46 +31,10 @@ class BurgerBuilder extends Component {
         }
       }
       this.props.onSetIngredientsState(ingredients);
-      // this.setState({ ingredients });
     });
   }
 
   price = calcPrice(this.props.ingrs);
-
-  // handleCheckout = () => {
-  //   const order = {
-  //     ingredients: this.props.ingrs,
-  //     totalPrice: calcPrice(this.props.ingrs),
-  //     id: Math.random(),
-  //   };
-  //   this.setState({ isCheckingout: false, isOrderProcessing: true, order });
-  //   setTimeout(() => {
-  //     this.setState({ isOrderProcessing: false });
-  //     this.props.history.push({
-  //       pathname: "/checkout",
-  //       state: this.state.order,
-  //     });
-  //   }, 1000);
-  // this.showSpinnerEndCheckOut();
-  // };
-
-  // showSpinnerEndCheckOut = () => {
-  //   setTimeout(() => {
-  //     this.setState({ isOrderProcessing: false });
-  //     this.props.history.push({
-  //       pathname: "/checkout",
-  //       state: this.state.order,
-  //     });
-  //   }, 1000);
-  // };
-
-  // handleCancelCheckout = () => {
-  //   this.setState({ isCheckingout: false });
-  // };
-
-  // handlePlaceOrder = () => {
-  //   this.setState({ isCheckingout: true });
-  // };
 
   render() {
     return this.props.ingrs.length ? (
@@ -87,7 +42,12 @@ class BurgerBuilder extends Component {
         {(this.props.isCheckingout || this.props.isOrderProcessing) && (
           <Backdrop handleHideBackdrop={this.props.onCancelCheckout} />
         )}
-        <Burger ingredients={this.props.ingrs} />
+        <Burger
+          ingredients={this.props.ingrs}
+          onSortEnd={({ oldIndex, newIndex }) =>
+            this.props.onSortEnd({ oldIndex, newIndex })
+          }
+        />
         <BuildControls
           isOrderProcessing={this.props.isOrderProcessing}
           handleCheckout={() =>
@@ -132,6 +92,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(asyncHandleCheckout(ingredients, history)),
     onPlaceOrder: () => dispatch(placeOrder()),
     onCancelCheckout: () => dispatch(cancelCheckout()),
+    onSortEnd: ({ oldIndex, newIndex }) =>
+      dispatch(sortEnd({ oldIndex, newIndex })),
   };
 };
 

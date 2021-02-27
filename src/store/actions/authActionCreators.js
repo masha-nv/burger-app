@@ -25,6 +25,7 @@ export const authFail = (error) => {
 
 export const signOut = () => {
   window.localStorage.removeItem("userId");
+  window.localStorage.removeItem("userEmail");
   return {
     type: actionTypes.SIGN_OUT,
   };
@@ -61,6 +62,7 @@ export const asyncAuthSuccess = (
         const localId = response.data.localId;
         dispatch(authSuccess(userId, idToken, localId));
         window.localStorage.setItem("userId", idToken);
+        window.localStorage.setItem("userEmail", userId);
         prevPath === "/checkout" ? history.push(prevPath) : history.push("/");
       })
       .catch((e) => {

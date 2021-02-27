@@ -45,7 +45,9 @@ export const fetchAllOrders = (orders) => {
 };
 
 export const asyncFetchAllOrders = (localId) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const userId = getState().authR.userId;
+    console.log("get state here", getState());
     const orders = [];
     axios
       .get("/myOrders.json?auth=" + localId)
@@ -53,7 +55,8 @@ export const asyncFetchAllOrders = (localId) => {
         console.log("RESPONSE", response);
         const result = Object.entries(response.data);
         for (let i = 0; i < result.length; i++) {
-          orders.push({ ...result[i][1], id: result[i][0] });
+          result[i][1].userId === userId &&
+            orders.push({ ...result[i][1], id: result[i][0] });
         }
         dispatch(fetchAllOrders(orders));
       })
